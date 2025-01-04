@@ -60,7 +60,7 @@ app.get('/search', async (req, res) => {
 });
 
 // Play a track, artist, or playlist on a device
-app.post('/play', async (req, res) => {
+app.get('/play', async (req, res) => {
     const { uri, deviceId } = req.query;
     if (!uri || !deviceId) return res.status(400).send('both URI and deviceId are required');
     try {
@@ -76,7 +76,7 @@ app.post('/play', async (req, res) => {
 });
 
 // Stop playback on a device
-app.post('/stop', async (req, res) => {
+app.get('/stop', async (req, res) => {
     const { deviceId } = req.query;
     if (!deviceId) return res.status(400).send('deviceId is required');
     try {
