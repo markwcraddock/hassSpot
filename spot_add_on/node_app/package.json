@@ -1,12 +1,15 @@
 {
-  "name": "hello-world-addon",
+  "name": "spotify-node-app",
   "version": "1.0.0",
-  "description": "A Hello World Node.js Add-On for Home Assistant",
-  "main": "server.js",
+  "description": "A Spotify Node.js app for controlling playback and managing playlists",
+  "main": "app.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "spotify-web-api-node": "^5.0.2",
+    "body-parser": "^1.20.2"
   }
 }
+
