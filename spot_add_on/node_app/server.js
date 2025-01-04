@@ -6,6 +6,6 @@ app.get('/', (req, res) => {
   res.send('Hello, Home Assistant!');
 });
 
-app.listen(port, '0.0.0.0' () => {
+app.listen(port, '0.0.0.0',() => {
   console.log(`Hello World app listening at http://localhost:${port}`);
 });
