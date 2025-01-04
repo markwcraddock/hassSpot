@@ -1,0 +1,12 @@
+{
+  "name": "hello-world-addon",
+  "version": "1.0.0",
+  "description": "A Hello World Node.js Add-On for Home Assistant",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
