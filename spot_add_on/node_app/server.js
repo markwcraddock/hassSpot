@@ -2,15 +2,19 @@
 const SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
 
 // Spotify API credentials
 const spotifyApi = new SpotifyWebApi({
-    clientId: 'YOUR_CLIENT_ID',
-    clientSecret: 'YOUR_CLIENT_SECRET',
-    redirectUri: 'http://localhost:3001/callback'
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirectUri: process.env.REDIRECT_URI
 });
 
 // Authenticate with Spotify
@@ -85,7 +89,43 @@ app.post('/stop', async (req, res) => {
 });
 
 // Start the server
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Spotify Node.js app is running on http://localhost:${PORT}`);
 });
+
+/*
+Environment Variables:
+Create a `.env` file in the project root with the following content:
+
+CLIENT_ID=your_spotify_client_id
+CLIENT_SECRET=your_spotify_client_secret
+REDIRECT_URI=http://localhost:3001/callback
+PORT=3001
+
+Docker Instructions:
+1. Create a `Dockerfile` in your project root with the following content:
+
+```
+FROM node:20
+WORKDIR /app
+COPY package.json .
+COPY package-lock.json .
+RUN npm install
+COPY . .
+EXPOSE 3001
+CMD ["node", "app.js"]
+```
+
+2. Build the Docker image:
+   docker build -t spotify-node-app .
+
+3. Run the container locally for testing:
+   docker run -p 3001:3001 --env-file .env spotify-node-app
+
+4. Move to Home Assistant:
+   - Export the image: docker save spotify-node-app > spotify-node-app.tar
+   - Copy to Home Assistant instance and load:
+     docker load < spotify-node-app.tar
+   - Run on Home Assistant with the same environment variables.
+*/
