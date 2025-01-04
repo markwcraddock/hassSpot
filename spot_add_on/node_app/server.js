@@ -46,6 +46,18 @@ app.get('/playlists', async (req, res) => {
     }
 });
 
+// List all devices
+app.get('//devices', async (req, res) => {
+  try {
+      const devices = await spotifyApi.getMyDevices();
+      res.json(devices.body);
+  } catch (err) {
+      console.error('Error fetching devices:', err);
+      res.status(500).send('Failed to fetch devices');
+  }
+});
+
+
 // Search for a track
 app.get('/search', async (req, res) => {
     const { query } = req.query;
