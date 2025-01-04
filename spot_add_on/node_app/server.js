@@ -61,8 +61,8 @@ app.get('/search', async (req, res) => {
 
 // Play a track, artist, or playlist on a device
 app.post('/play', async (req, res) => {
-    const { uri, deviceId } = req.body;
-    if (!uri || !deviceId) return res.status(400).send('URI and deviceId are required');
+    const { uri, deviceId } = req.query;
+    if (!uri || !deviceId) return res.status(400).send('both URI and deviceId are required');
     try {
         await spotifyApi.play({
             device_id: deviceId,
@@ -77,7 +77,7 @@ app.post('/play', async (req, res) => {
 
 // Stop playback on a device
 app.post('/stop', async (req, res) => {
-    const { deviceId } = req.body;
+    const { deviceId } = req.query;
     if (!deviceId) return res.status(400).send('deviceId is required');
     try {
         await spotifyApi.pause({ device_id: deviceId });
