@@ -47,7 +47,7 @@ app.get('/playlists', async (req, res) => {
 });
 
 // List all devices
-app.get('//devices', async (req, res) => {
+app.get('/devices', async (req, res) => {
   try {
       const devices = await spotifyApi.getMyDevices();
       res.json(devices.body);
