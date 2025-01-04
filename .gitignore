@@ -4,6 +4,7 @@
 
 # Environment variables
 .env
+spot_add_on/.env
 
 # Logs
 *.log
