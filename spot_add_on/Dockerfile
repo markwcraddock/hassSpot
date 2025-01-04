@@ -5,7 +5,6 @@ WORKDIR /app
 
 # Copy Node.js app
 COPY ./node_app /app
-COPY package.json .
 
 # Install dependencies
 RUN npm install
