@@ -11,7 +11,8 @@
   },
   "options": {
   "client_id": "",
-  "client_secret": ""
+  "client_secret": "",
+  "redirect_uri": "http://localhost:3001/callback"
   },
 "schema":{
   "client_id": "str",
