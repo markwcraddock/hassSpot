@@ -3,6 +3,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const fs = require('fs');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -10,12 +11,32 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
+const TOKEN_FILE = './tokens.json';
+
 // Spotify API credentials
 const spotifyApi = new SpotifyWebApi({
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     redirectUri: process.env.REDIRECT_URI
 });
+
+// Load stored tokens from file
+function loadTokens() {
+  if (fs.existsSync(TOKEN_FILE)) {
+      const tokens = JSON.parse(fs.readFileSync(TOKEN_FILE, 'utf8'));
+      if (tokens.accessToken) spotifyApi.setAccessToken(tokens.accessToken);
+      if (tokens.refreshToken) spotifyApi.setRefreshToken(tokens.refreshToken);
+  }
+}
+
+// Save tokens to file
+function saveTokens() {
+  const tokens = {
+      accessToken: spotifyApi.getAccessToken(),
+      refreshToken: spotifyApi.getRefreshToken(),
+  };
+  fs.writeFileSync(TOKEN_FILE, JSON.stringify(tokens, null, 2));
+}
 
 // Authenticate with Spotify
 app.get('/login', (req, res) => {
@@ -33,6 +54,34 @@ app.get('/callback', (req, res) => {
         console.error('Error during authentication:', err);
         res.status(500).send('Authentication failed');
     });
+});
+
+
+// Refresh Access Token
+async function refreshAccessToken() {
+  try {
+      const data = await spotifyApi.refreshAccessToken();
+      spotifyApi.setAccessToken(data.body['access_token']);
+      saveTokens();
+      console.log('Access token refreshed');
+  } catch (err) {
+      console.error('Could not refresh access token', err);
+  }
+}
+
+// Middleware to ensure a valid token
+app.use(async (req, res, next) => {
+  if (!spotifyApi.getAccessToken()) {
+      return res.status(401).send('Spotify API not authenticated. Please /login.');
+  }
+  try {
+      await spotifyApi.getMe(); // Test token validity
+      next();
+  } catch (err) {
+      console.warn('Access token expired. Attempting to refresh...');
+      await refreshAccessToken();
+      next();
+  }
 });
 
 // List all playlists
@@ -104,6 +153,7 @@ app.get('/stop', async (req, res) => {
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Spotify Node.js app is running on http://localhost:${PORT}`);
+    loadTokens();
 });
 
 /*
