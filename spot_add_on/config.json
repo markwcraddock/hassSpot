@@ -9,13 +9,6 @@
   "ports": {
     "3000/tcp": 3001
   },
-  "options": {
-  "client_id": "",
-  "client_secret": "",
-  "redirect_uri": "http://localhost:3001/callback"
-  },
-"schema":{
-  "client_id": "str",
-  "client_secret": "str"
-}
+  "options": {},
+  "schema":{}
 }

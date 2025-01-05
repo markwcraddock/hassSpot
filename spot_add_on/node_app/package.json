@@ -1,6 +1,6 @@
 {
   "name": "spotify-node-app",
-  "version": "1.0.0",
+  "version": "0.0.9",
   "description": "A Spotify Node.js app for controlling playback and managing playlists",
   "main": "app.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "express": "^4.18.2",
     "spotify-web-api-node": "^5.0.2",
     "body-parser": "^1.20.2",
-    "dotenv":"^16.4.7"
+    "axios":"^1.7.9"
   }
 }
 
