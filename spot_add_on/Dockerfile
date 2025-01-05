@@ -3,6 +3,9 @@ FROM node:lts
 # Set working directory
 WORKDIR /app
 
+#maintain volume across restarts
+VOLUME ["/app"]
+
 # Copy Node.js app
 COPY ./node_app /app
 
